@@ -175,11 +175,11 @@ void OneButton::tick(bool activeLevel)
                ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true; // Keep track of long press state
       if (_pressFunc)
-        _pressFunc();
+        _pressFunc(_pin);
       if (_longPressStartFunc)
-        _longPressStartFunc();
+        _longPressStartFunc(_pin);
       if (_duringLongPressFunc)
-        _duringLongPressFunc();
+        _duringLongPressFunc(_pin);
       _state = 6; // step to state 6
       _stopTime = now; // remember stopping time
     } else {
@@ -192,7 +192,7 @@ void OneButton::tick(bool activeLevel)
         (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc)
-        _clickFunc();
+        _clickFunc(_pin);
       _state = 0; // restart.
 
     } else if ((activeLevel) &&
@@ -208,7 +208,7 @@ void OneButton::tick(bool activeLevel)
         ((unsigned long)(now - _startTime) > _debounceTicks)) {
       // this was a 2 click sequence.
       if (_doubleClickFunc)
-        _doubleClickFunc();
+        _doubleClickFunc(_pin);
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } // if
@@ -218,14 +218,14 @@ void OneButton::tick(bool activeLevel)
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
       if (_longPressStopFunc)
-        _longPressStopFunc();
+        _longPressStopFunc(_pin);
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } else {
       // button is being long pressed
       _isLongPressed = true; // Keep track of long press state
       if (_duringLongPressFunc)
-        _duringLongPressFunc();
+        _duringLongPressFunc(_pin);
     } // if
 
   } // if
